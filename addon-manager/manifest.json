@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "Addon Manager",
+  "author": "Ciaran & Chris",
+  "description": "Manage your Firefox add-ons and themes from the toolbar with customizable groups. Due to Firefox restrictions, enabling or disabling other add-ons only works when this extension is force-installed through an enterprise ExtensionSettings policy.",
+  "version": "1.48",
+  "permissions": [
+    "storage",
+    "management"
+  ],
+  "icons": {
+    "16": "images/googleCog16.png",
+    "48": "images/googleCog48.png",
+    "128": "images/googleCog128.png"
+  },
+  "action": {
+    "default_icon": "images/googleCog128.png",
+    "default_popup": "popup.html"
+  },
+  "short_name": "Addon Manager",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "addon-manager@luascfl",
+      "strict_min_version": "109.0",
+      "data_collection": {
+        "access": "never",
+        "collection": "not_collected"
+      },
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ],
+        "optional": []
+      }
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "data_collection": {
+    "none": {
+      "description": "Addon Manager operates locally, toggling installed add-ons without collecting or transmitting user data."
+    }
+  }
+}
