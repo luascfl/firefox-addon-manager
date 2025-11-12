@@ -18,7 +18,7 @@ Firefox only lets an extension enable/disable other add-ons when it is force-ins
    ```
 2. **Host the XPI** somewhere HTTPS-accessible (GitHub Pages, internal CDN, etc.).
 3. **Configure the policy** using Firefox’s `ExtensionSettings`. The sample `install-addon-policy.sh` demonstrates how to point the policy to your hosted `.xpi`.
-4. **Deploy the policy** via GPO, MDM, or `policies.json`. Firefox will use the `browser_specific_settings.gecko.update_url` already set to `https://github.com/luascfl/firefox-addon-manager` (update as needed) to fetch new builds automatically.
+4. **Deploy the policy** via GPO, MDM, or `policies.json`. Firefox will read the `browser_specific_settings.gecko.update_url`, which now points to `https://raw.githubusercontent.com/luascfl/firefox-addon-manager/main/updates.json`, and will follow the JSON entry to download the latest `.xpi`. Update both `updates.json` and the packaged file whenever you ship a new version.
 
 ## Credits
 Addon Manager is built on the original Custom Chrome – Extension Manager by **@cderm** and **@ciaranmag**. Huge thanks for the design inspiration and feature foundation.
