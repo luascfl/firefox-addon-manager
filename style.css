@@ -513,16 +513,16 @@ span.badge.new {
 	float:right;
 }
 
-#changelogModal p,
-#changelogModal ul {
+#creditsModal p,
+#creditsModal ul {
 	font-size: 1rem;
 }
 
-#changelogModal ul {
+#creditsModal ul {
 	margin-left: 25px;
 }
 
-#changelogModal ul li {
+#creditsModal ul li {
 	list-style-type: disc;
 }
 

@@ -1,36 +1,24 @@
-# Firefox Add-on Manager
+# Addon Manager for Firefox
 
-A lightweight Firefox WebExtension to help inspect and manage installed add-ons from the browser (extension UI, developer tooling, and utilities). Designed to be simple, extensible, and easy to run locally.
+Manage every Firefox extension from a single toolbar button. Addon Manager keeps the beloved Custom Chrome workflow but adapts it for Firefox-exclusive deployments.
 
-## About
-This repository contains the source for a Firefox WebExtension that provides a focused interface and tooling to inspect, enable/disable, and manage installed browser add-ons. The project is implemented with JavaScript, HTML, CSS and includes shell helper scripts where appropriate.
+## Highlights
+- Toolbar context menu adds `Disable all active extensions` / `Restore N extensions`, remembering exactly which add-ons you toggled.
+- Groups let you store curated sets of extensions (e.g., “Web Dev”, “Meetings”) and flip them on/off without opening `about:addons`.
+- Quick links open an extension’s options page, AMO listing, or sharing URL so teammates can install the same tools.
 
-## Features
-- Browser-side UI for viewing installed extensions and their metadata
-- Enable/disable extensions without leaving the tool
-- Quick access to extension folders and developer information
-- Designed as a WebExtension compatible with Firefox
-- Lightweight and easily extensible
+## Self-hosted / Enterprise Workflow
+Firefox only lets an extension enable/disable other add-ons when it is force-installed via enterprise policy. To side-load and keep Addon Manager updated:
 
-## Getting started
-To try this extension locally:
+1. **Clone & build**
+   ```bash
+   git clone https://github.com/luascfl/firefox-addon-manager.git
+   cd firefox-addon-manager
+   zip -r addon-manager-firefox.xpi .
+   ```
+2. **Host the XPI** somewhere HTTPS-accessible (GitHub Pages, internal CDN, etc.).
+3. **Configure the policy** using Firefox’s `ExtensionSettings`. The sample `install-addon-policy.sh` demonstrates how to point the policy to your hosted `.xpi`.
+4. **Deploy the policy** via GPO, MDM, or `policies.json`. Firefox will use the `browser_specific_settings.gecko.update_url` already set to `https://github.com/luascfl/firefox-addon-manager` (update as needed) to fetch new builds automatically.
 
-1. Open Firefox and go to about:debugging (or the equivalent Developer Tools > Debug Add-ons page).
-2. Choose "This Firefox" (or "Load Temporary Add-on").
-3. Select the extension's manifest file (manifest.json) from the repository root or the build output.
-4. The extension will load temporarily and you can interact with it from the toolbar or the extension list.
-
-Packaging and distribution: when you're ready to distribute, package the extension into an XPI. Common approaches include using Mozilla's web-ext tooling or zipping the extension folder and signing/uploading through addons.mozilla.org (AMO). (This README intentionally omits step-by-step publishing instructions.)
-
-## Usage
-- Open the extension from the toolbar or via the Extensions page.
-- Browse the list of installed add-ons and inspect details.
-- Use the provided controls to enable/disable or inspect extension directories and metadata.
-- For debugging, use the built-in developer tools or open the extension's background/action pages.
-
-## Contributing
-Contributions are welcome.
-- Open an issue to discuss major changes or report bugs.
-- Fork the repository, make changes on a branch, and open a pull request.
-- Keep changes focused and include tests or manual verification steps where applicable.
-- Follow common web extension security practices: avoid exposing secrets, validate inputs, and limit permissions in manifest.json.
+## Credits
+Addon Manager is built on the original Custom Chrome – Extension Manager by **@cderm** and **@ciaranmag**. Huge thanks for the design inspiration and feature foundation.

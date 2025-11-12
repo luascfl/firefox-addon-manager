@@ -1,6 +1,5 @@
 /****** DECLARING VARIABLES *****/
 let extArray = [],
-appArray = [],
 activeExtensions = [],
 inactiveExtensions = [],
 idList = [],
@@ -106,18 +105,11 @@ chrome.management.getAll(function(info) {
 		// Make an array of all the extension and app ids
 		justIds.push(entry.id);
 		// console.log(info[i]);
-		switch(entry.type) {
-			case "extension":
-				extArray.push(entry);
-				break;
-			case "hosted_app":
-			case "packaged_app":
-				extArray.push(entry);
-				entry.isApp = '<span class="new badge"></span>';
-				break;
-			default:
-				// console.log(entry.type);
+		if (entry.type !== "extension") {
+			continue;
 		}
+
+		extArray.push(entry);
 	}
 
 	// call function to check storage.sync for existing user groups
@@ -229,13 +221,8 @@ $('#searchbox').focus();
 
 // Add active and inactive extension count next to card title
 function getExtensionCount() {
-	if (user.includeApps) {
-		$('#activeCount').text($('#activeExtensions').children('.extBlock').length);
-		$('#inactiveCount').text($('#inactiveExtensions').children('.extBlock').length);
-	} else if (!user.includeApps) {
-		$('#activeCount').text($('#activeExtensions').children('.extBlock:not(.app)').length);
-		$('#inactiveCount').text($('#inactiveExtensions').children('.extBlock:not(.app)').length);
-	}
+	$('#activeCount').text($('#activeExtensions').children('.extBlock').length);
+	$('#inactiveCount').text($('#inactiveExtensions').children('.extBlock').length);
 }
 
 function handleGroupsClasses(){
@@ -413,17 +400,7 @@ function getUserData() {
 			$('#compactStylesheet')[0].disabled = false;
 		}
 
-		// hide apps if user has toggled that option
-		if (!user.includeApps) {
-			// hide apps
-			$('.app').hide();
-			$('#searchbox').attr('placeholder','search extensions');
-		}
-		else {
-			// set toggle switch to checked
-			$('#include-apps-switch').attr('checked', true);
-			$('#searchbox').attr('placeholder','search extensions and apps');
-		}
+		$('#searchbox').attr('placeholder','search extensions');
 		
 		getExtensionCount();
 
@@ -615,7 +592,7 @@ $("#editExtSubmit").submit(function(e){
 
 function template(entry) {
 	return `
-	<div class="extBlock${entry.isApp ? ' app' : ''}">
+	<div class="extBlock">
 	<div class="lefty">
 	 	<div class="picHolder">
 	 		<img src="${entry.pic}">
@@ -624,7 +601,6 @@ function template(entry) {
 			<span class="extName">${entry.name}</span>
 			${entry.disabledReason === "permissions_increase" ? '<span style="color:red">(needs more permissions)</span>' : ''}
       ${entry.development ? '<span class="development-badge tooltipped" data-tooltip="Development">D</span>' : ''}
-    	${entry.isApp ? '<span class="new badge"></span>' : ''}
       <br>
 		 	${!user.compactStyles ? `<span class="extDescription">${entry.description}</span>`: ''}
 		</div>
@@ -668,7 +644,6 @@ function extListTemplate(ext) {
 		<div class='extList-name'>
 			<span>${ext.name}</span>
 			${ext.development ? '<span class="development-badge tooltipped" data-tooltip="Development">D</span>' : ''}
-    	${ext.isApp ? '<span class="new badge"></span>' : ''}
 		</div>
 	</div>`;
 }
@@ -718,9 +693,8 @@ $('#refresh-icon').on('click', function (e) {
 $("#searchbox").keyup(function () {
 	// Retrieve the input field text
 	let searchTerm = $(this).val();
-	// Loop through the extensions, toFilter array will hold all elements to search through
-	// fill this depending on whether apps are on or off
-	let toFilter = user.includeApps ? $(".extBlock") : $(".extBlock:not(.app)");
+	// Loop through the extensions and filter the in-view blocks
+	let toFilter = $(".extBlock");
 
 	toFilter.each(function (i, el) {
 		return $(el).find('.extName').text().search(new RegExp(searchTerm, "i")) < 0 ? $(el).fadeOut() : $(el).fadeIn();
@@ -1010,26 +984,6 @@ $('.compact-styles-switch').change(function () {
 	chrome.storage.sync.set(user);
 });
 
-// turn on/off show apps
-$('#include-apps-switch').change(function (e) {
-	if (e.target.checked) {
-		// user wishes to include apps
-		$('.app').show();
-		Materialize.toast('Apps now showing', 2000, 'ccToastOn');
-		$('#searchbox').attr('placeholder', 'search extensions and apps');
-	}
-	else {
-		// user wishes to hide all apps
-		$('.app').hide();
-		Materialize.toast('Apps will not be shown', 2000, 'ccToastOff');
-		$('#searchbox').attr('placeholder', 'search extensions');
-	}
-
-	getExtensionCount();
-	user.includeApps = e.target.checked;
-	chrome.storage.sync.set(user);
-});
-
 $("body").on("click", ".copy-clipboard", function (e) {
 	e.preventDefault();
 	value = $(this).data('clipboard'); // Upto this I am getting value
@@ -1068,28 +1022,8 @@ function fixStorage(groups) {
 	getUserData();
 }
 
-let currentVersion = chrome.runtime.getManifest().version;
-// Check if the version has changed
-if (currentVersion != localStorage.version) {
-  localStorage.version = currentVersion;
-	showChangeLog();
-}
-
-function showChangeLog() {
-	let changelogHTML = '';
-	for (let [key, value] of Object.entries(changelog)) {
-		changelogHTML += `<h6>${key}</h6><ul>`;
-		value.forEach(function (item) {
-			changelogHTML += `<li>${item}</li>`;
-		});
-		changelogHTML += '</ul>';
-	}
-	$('#changelogModal .modal-content')[0].innerHTML += changelogHTML;
-	$('#changelogModal').openModal();
-}
-
-$('#viewChangelog').click(() => {
-	showChangeLog();
+$('#viewCredits').click(() => {
+	$('#creditsModal').openModal();
 });
 
 // remove this extension from user's existing groups to prevent them from unintentionally turning it off
