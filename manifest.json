@@ -3,7 +3,7 @@
   "name": "Addon Manager",
   "author": "Ciaran & Chris",
   "description": "Manage your Firefox add-ons and themes from the toolbar with customizable groups. Due to Firefox restrictions, enabling or disabling other add-ons only works when this extension is force-installed through an enterprise ExtensionSettings policy.",
-  "version": "1.51",
+  "version": "1.52",
   "permissions": [
     "storage",
     "management",
@@ -17,6 +17,14 @@
   "action": {
     "default_icon": "images/googleCog128.png",
     "default_popup": "popup.html"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+E"
+      },
+      "description": "Ativar o Addon Manager"
+    }
   },
   "short_name": "Addon Manager",
   "background": {
