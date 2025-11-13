@@ -3,7 +3,7 @@
     "addon-manager@luascfl": {
       "updates": [
         {
-          "version": "1.51",
+          "version": "1.52",
           "update_link": "https://raw.githubusercontent.com/luascfl/firefox-addon-manager/main/addon-manager-firefox.xpi"
         }
       ]
