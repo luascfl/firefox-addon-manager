@@ -27,6 +27,7 @@
     }
   },
   "short_name": "Addon Manager",
+  "license": "MPL-2.0",
   "background": {
     "scripts": [
       "background.js"
@@ -36,7 +37,6 @@
     "gecko": {
       "id": "addon-manager@luascfl",
       "strict_min_version": "109.0",
-      "update_url": "https://raw.githubusercontent.com/luascfl/firefox-addon-manager/main/updates.json",
       "data_collection": {
         "access": "never",
         "collection": "not_collected"
