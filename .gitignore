@@ -5,3 +5,15 @@ AMO_API_KEY.txt
 AMO_API_SECRET
 AMO_API_SECRET.txt
 .web-ext-artifacts/
+.env
+*.env.local
+*.env.development
+*.env.production
+__pycache__/
+.gemini
+*API*
+.eslintcache/
+node_modules/
+dist/
+build/
+*.zip
